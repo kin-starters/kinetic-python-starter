@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "kinetic-python-starter"
+version = "0.1.0"
+description = ""
+authors = ["Kin Foundation <dev@kin.org>"]
+readme = "README.md"
+packages = [{include = "kinetic_python_starter"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.20.0"
+fastapi = "^0.87.0"
+kinetic-sdk = "^1.0.0rc61"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
