@@ -1,5 +1,6 @@
 from kinetic_sdk import Keypair
 from kinetic_sdk import KineticSdk
+from kinetic_sdk.generated.client.model.commitment import Commitment
 
 # import { AppConfigMint, KineticSdk, Transaction } from '@kin-kinetic/sdk'
 # import { Commitment, TransactionType } from '@kin-kinetic/solana'
@@ -24,36 +25,34 @@ class Kinetic(object):
 
     def payment(self, amount: int, destination: str):
         # Check if amount is below the maximum
-        if amount > int(self.config.payment_max):
-            raise f"Payment amount is too large, max is {self.config.payment_max}"
+        if amount > int(self.config['payment_max']):
+            raise Exception(f"Payment amount is too large, max is {self.config['payment_max']}")
     
         # If we don't allow funding existing accounts, check if the destination account has funds
-        if self.config.payment_allow_existing is None:
+        if self.config['payment_allow_existing'] is None:
             # Check to see if the destination account already has funds
             result = self.sdk.get_balance(destination)
 
             if result['balance'] is not 0:
-                raise f"Account '{destination}' is already funded: {result['balance']} Kin"
+                raise Exception(f"Account '{destination}' is already funded: {result['balance']} Kin")
     
         # If we don't allow new accounts, check to see if the account exists
-        if self.config.payment_allow_new is None:
+        if self.config['payment_allow_new'] is None:
             found = self.sdk.get_token_accounts(destination)
 
             if len(found) == 0:
-                raise f"Can't send payment to new account {destination}."
+                raise Exception(f"Can't send payment to new account {destination}.")
     
 
-        try:
-            print(f"⬢ Payment: sending {amount} Kin to {destination}...")
-            tx = self.submit_payment(
-                amount,
-                destination,
-                sender_create=self.config.payment_allow_new
-            )
-            print(f"⬢ Payment: sent {amount} Kin to {destination}... {tx.explorer} ")
-            return tx
-        except Exception as err:
-            raise f"Account {destination} something went wrong: {err} "
+        # try:
+        tx = self._submit_payment(
+            str(amount),
+            destination,
+            sender_create = self.config['payment_allow_new']
+        )
+        return tx
+        # except Exception as err:
+        #     raise Exception(f"Account {destination} something went wrong: {err} ")
 
 
     def find_or_create_account(self):
@@ -62,10 +61,10 @@ class Kinetic(object):
 
         print(f"⬢ Payment: account: {self.sdk.get_explorer_url(f'address/{public_key}')}")
         print(f"⬢ Payment: address: ${public_key}")
-        print(f"⬢ Payment: allow empty accounts: {'yes' if self.config.payment_allow_new is True else 'no'}")
-        print(f"⬢ Payment: allow existing accounts: {'yes' if self.config.payment_allow_existing is True else 'no'}")
-        print(f"⬢ Payment: max: {self.config.paymentMax}")
-        print(f"⬢ Payment: secret: {'enabled' if self.config.payment_secret is True else 'disabled'}")
+        print(f"⬢ Payment: allow empty accounts: {'yes' if self.config['payment_allow_new'] is True else 'no'}")
+        print(f"⬢ Payment: allow existing accounts: {'yes' if self.config['payment_allow_existing'] is True else 'no'}")
+        print(f"⬢ Payment: max: {self.config['payment_max']}")
+        print(f"⬢ Payment: secret: {'enabled' if self.config['payment_secret'] is True else 'disabled'}")
 
         account = self.sdk.get_balance(self.public_key)
 
@@ -133,15 +132,15 @@ class Kinetic(object):
         self,
         amount: str,
         destination: str,
-        sender_create: bool
+        sender_create
     ):
         tx = self.sdk.make_transfer(
             amount = amount,
-            commitment = 'Confirmed',
+            commitment = Commitment('Confirmed'),
             destination = destination,
             owner = self.keypair,
-            sender_create = sender_create,
-            type = 'Earn',
+            # sender_create = sender_create,
+            # type = 'Earn',
         )
 
         return {
