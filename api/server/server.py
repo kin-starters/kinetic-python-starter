@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, Response, Request
+from fastapi import FastAPI, APIRouter, Body, Request
 from kinetic_sdk import KineticSdk, Keypair
 
 from server.server_config import get_server_config
@@ -24,14 +24,16 @@ sdk = KineticSdk.setup(
 # Create instance of our Kinetic helper class
 kinetic = Kinetic(config, sdk, Keypair.from_mnemonic(config['payment_mnemonic']))
 
+# Payment Routes, pass in our Kinetic helper class
 @api_router.get("/payment/{destination}/{amount}", status_code=200)
-def payment(destination: str, amount: int, req: Request, res: Response) -> dict:
-    return payment_route(req, res, kinetic, destination, amount)
+def payment(destination: str, amount: int, req: Request) -> dict:
+    return payment_route(req, kinetic, destination, amount)
 
 
-@api_router.get("/webhook/{type}", status_code=200)
-def webhook(type: str) -> dict:
-    return webhook_route(kinetic, type)
+# Webhook Routes, pass in our Kinetic helper class
+@api_router.post("/webhook/{type}", status_code=200)
+def webhook(type: str, payload: dict = Body()) -> dict:
+    return webhook_route(payload, kinetic, type)
 
 
 @app.get("/uptime", status_code=200)

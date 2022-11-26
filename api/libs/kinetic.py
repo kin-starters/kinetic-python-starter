@@ -2,6 +2,8 @@ from kinetic_sdk import Keypair
 from kinetic_sdk import KineticSdk
 from kinetic_sdk.generated.client.model.commitment import Commitment
 
+import json
+
 # import { AppConfigMint, KineticSdk, Transaction } from '@kin-kinetic/sdk'
 # import { Commitment, TransactionType } from '@kin-kinetic/solana'
 
@@ -86,7 +88,11 @@ class Kinetic(object):
 
 
     def handle_balance_webhook(self, balance: str, change: str, error, success):
-        print(f"📨 Webhook: Balance: { balance, change }") # FIXME: Stringify
+        output = {
+            'balance': balance, 
+            'change': change
+        }
+        print(f"📨 Webhook: Balance: {json.dumps(output, indent=2)})")
         return success()
 
 
@@ -105,11 +111,11 @@ class Kinetic(object):
 
         # Check if the amount is above the minimum
         if int(amount) < 100:
-            return Exception('Amount too low...')
+            return error('Amount too low...')
 
         # Check if the destination address is not the payment account
         if destination == self.public_key:
-            return Exception('Destination is payment account...')
+            return error('Destination is payment account...')
 
         # Add your own verification here...
         print(f"📨 Webhook: Verify: sending {amount} to {destination} ")
@@ -139,7 +145,7 @@ class Kinetic(object):
             commitment = Commitment('Confirmed'),
             destination = destination,
             owner = self.keypair,
-            # sender_create = sender_create,
+            # sender_create = sender_create, # FIXME: Support Sender Create
             # type = 'Earn',
         )
 
