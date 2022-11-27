@@ -11,6 +11,7 @@ uvicorn = "^0.20.0"
 fastapi = "^0.87.0"
 kinetic-sdk = "^1.0.0rc8.post2"
 python-dotenv = "^0.21.0"
+uptime = "^3.0.1"
 
 
 [build-system]

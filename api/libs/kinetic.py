@@ -62,15 +62,15 @@ class Kinetic(object):
         public_key = self.public_key()
 
         print(f"⬢ Payment: account: {self.sdk.get_explorer_url(f'address/{public_key}')}")
-        print(f"⬢ Payment: address: ${public_key}")
+        print(f"⬢ Payment: address: {public_key}")
         print(f"⬢ Payment: allow empty accounts: {'yes' if self.config['payment_allow_new'] is True else 'no'}")
         print(f"⬢ Payment: allow existing accounts: {'yes' if self.config['payment_allow_existing'] is True else 'no'}")
         print(f"⬢ Payment: max: {self.config['payment_max']}")
         print(f"⬢ Payment: secret: {'enabled' if self.config['payment_secret'] is True else 'disabled'}")
 
-        account = self.sdk.get_balance(self.public_key)
+        account = self.sdk.get_balance(str(self.public_key))
 
-        print(f"⬢ Payment: balance: ${account.balance} {self.mint.symbol} ")
+        print(f"⬢ Payment: balance: {account.balance} {self.mint.symbol} ")
 
         if account.balance is '0':
             # If the default Kinetic mint has airdrop enabled, we can fund ourselves...
@@ -129,7 +129,7 @@ class Kinetic(object):
             owner=self.keypair,
             commitment='Finalized',
         )
-        print(f"⬢ Payment: account: created account {self.sdk.get_explorer_url(f'tx/${created.signature}')}...")
+        print(f"⬢ Payment: account: created account {self.sdk.get_explorer_url(f'tx/{created.signature}')}...")
         # Resolve Token Account
         return self.sdk.get_token_accounts(self.public_key())
 

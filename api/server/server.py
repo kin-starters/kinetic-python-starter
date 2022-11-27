@@ -41,5 +41,17 @@ def uptime() -> dict:
     return uptime_route()
 
 
+# Start server
 app.include_router(api_router)
+print(f"🚀 Listening on port {config['port']}")
+# print(f"⬢ Kinetic: Connected to App: {sdk.config['app']['name']} {sdk.config['app']['index']} ")
+# print(f"⬢ Kinetic: Connected to API: {sdk.config['api']['name']} {sdk.config['api']['version']} ")
+# print(f"⬢ Kinetic: Connected to Environment: {sdk.config['environment']['name']} ({sdk.config['environment']['cluster']['name']}) ")
 
+# for mint in sdk.config['mints']:
+#     print(f"⬢ Kinetic: Mint: {mint.name} {mint.get('publicKey')} ({mint.decimals} decimals) (Payment: { f'max {mint.airdropMax} {mint.symbol}' if mint.get['airdrop'] != None else 'disabled'}) ")
+
+
+# Initialize PaymentAccount
+# kinetic.find_or_create_account()
+print("⬢ Payment: link /payment/<destination>/<amount>")
