@@ -57,5 +57,5 @@ for mint in config['mints']:
 
 
 # Initialize PaymentAccount
-# kinetic.find_or_create_account()
+kinetic.find_or_create_account()
 print("⬢ Payment: link /payment/<destination>/<amount>")

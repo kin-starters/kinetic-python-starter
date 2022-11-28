@@ -3,8 +3,6 @@ from libs.kinetic import Kinetic
 
 
 def payment_route(req: Request, kinetic: Kinetic, destination: str, amount: int) -> dict:
-    print(req.headers)
-
     payment_secret = kinetic.config.get('payment_secret')
     auth_secret = req.headers.get('authorization')
     if ((payment_secret != '' and 'payment_secret' != None)

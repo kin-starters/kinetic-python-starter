@@ -19,6 +19,6 @@ def webhook_route(payload: dict, kinetic: Kinetic, type: str) -> dict:
     else:
         return error('Webhook type supported.')
 
-    print(payload)
     return success()
+
 

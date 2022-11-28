@@ -18,7 +18,7 @@ class Kinetic(object):
 
 
     def mint(self):
-        return self.sdk.config.mint
+        return self.sdk.internal.app_config['mint']
 
 
     def public_key(self):
@@ -35,7 +35,7 @@ class Kinetic(object):
             # Check to see if the destination account already has funds
             result = self.sdk.get_balance(destination)
 
-            if result['balance'] is not 0:
+            if result['balance'] != 0:
                 raise Exception(f"Account '{destination}' is already funded: {result['balance']} Kin")
     
         # If we don't allow new accounts, check to see if the account exists
@@ -46,20 +46,21 @@ class Kinetic(object):
                 raise Exception(f"Can't send payment to new account {destination}.")
     
 
-        # try:
-        tx = self._submit_payment(
-            str(amount),
-            destination,
-            sender_create = self.config['payment_allow_new']
-        )
-        return tx
-        # except Exception as err:
-        #     raise Exception(f"Account {destination} something went wrong: {err} ")
+        try:
+            tx = self._submit_payment(
+                str(amount),
+                destination,
+                sender_create = self.config['payment_allow_new']
+            )
+            return tx
+        except Exception as err:
+            raise Exception(f"Account {destination} something went wrong: {err} ")
 
 
     def find_or_create_account(self):
         """ Helper function initializes the account. """
         public_key = self.public_key()
+        mint = self.mint()
 
         print(f"⬢ Payment: account: {self.sdk.get_explorer_url(f'address/{public_key}')}")
         print(f"⬢ Payment: address: {public_key}")
@@ -68,23 +69,30 @@ class Kinetic(object):
         print(f"⬢ Payment: max: {self.config['payment_max']}")
         print(f"⬢ Payment: secret: {'enabled' if self.config['payment_secret'] is True else 'disabled'}")
 
-        account = self.sdk.get_balance(str(self.public_key))
+        
+        # Get the balance of this account
+        account = self.sdk.get_balance(account=str(public_key))
 
-        print(f"⬢ Payment: balance: {account.balance} {self.mint.symbol} ")
+        if (len(account.tokens) == 0):
+            # If the account doesn't have any tokens, create it.
+            self._create_account()
+    
 
-        if account.balance is '0':
+        print(f"⬢ Payment: balance: {account['balance']} {mint['symbol']} ")
+
+        if account.balance == '0':
             # If the default Kinetic mint has airdrop enabled, we can fund ourselves...
-            if self.mint.airdrop and self.mint.airdrop_max is not None:
-                print(f"⬢ Payment: account: {public_key} is empty, requesting airdrop of {str(self.mint.airdrop_max)} {self.mint.symbol}...")
+            if mint['airdrop'] and mint['airdrop_max'] is not None:
+                print(f"⬢ Payment: account: {public_key} is empty, requesting airdrop of {str(mint['airdrop_max'])} {mint.get('symbol')}...")
 
                 tx = self.sdk.request_airdrop(
-                    account=self.public_key,
-                    amount=str(self.mint.airdrop_max)
+                    account=public_key,
+                    amount=str(mint['airdrop_max'])
                 )
 
                 print(f"⬢ Payment: request: {self.sdk.get_explorer_url(f'tx/{tx.signature}')}")
             else:
-                print(f"⬢ Payment: account: Make sure to fund this account with some {self.mint.symbol}.")
+                print(f"⬢ Payment: account: Make sure to fund this account with some {mint['symbol']}.")
 
 
     def handle_balance_webhook(self, balance: str, change: str, error, success):
