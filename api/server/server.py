@@ -44,12 +44,16 @@ def uptime() -> dict:
 # Start server
 app.include_router(api_router)
 print(f"🚀 Listening on port {config['port']}")
-# print(f"⬢ Kinetic: Connected to App: {sdk.config['app']['name']} {sdk.config['app']['index']} ")
-# print(f"⬢ Kinetic: Connected to API: {sdk.config['api']['name']} {sdk.config['api']['version']} ")
-# print(f"⬢ Kinetic: Connected to Environment: {sdk.config['environment']['name']} ({sdk.config['environment']['cluster']['name']}) ")
+config = sdk.internal.app_config
+print(f"⬢ Kinetic: Connected to App: {config['app']['name']} {config['app']['index']} ")
+print(f"⬢ Kinetic: Connected to API: {config['api']['name']} {config['api']['version']} ")
+print(f"⬢ Kinetic: Connected to Environment: {config['environment']['name']} ({config['environment']['cluster']['name']}) ")
 
-# for mint in sdk.config['mints']:
-#     print(f"⬢ Kinetic: Mint: {mint.name} {mint.get('publicKey')} ({mint.decimals} decimals) (Payment: { f'max {mint.airdropMax} {mint.symbol}' if mint.get['airdrop'] != None else 'disabled'}) ")
+for mint in config['mints']:
+    mint_airdrop_max = mint['airdrop_max']
+    mint_symbol = mint['symbol']
+    mint_airdrop = mint['airdrop']
+    print(f"⬢ Kinetic: Mint: {mint.name} {mint['public_key']} ({mint.decimals} decimals) (Payment: { f'max {mint_airdrop_max} {mint_symbol}' if {mint_airdrop} != None else 'disabled'}) ")
 
 
 # Initialize PaymentAccount
