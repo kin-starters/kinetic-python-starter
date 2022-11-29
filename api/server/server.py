@@ -45,7 +45,6 @@ def uptime() -> dict:
 app.include_router(api_router)
 print(f"🚀 Listening on port {config['port']}")
 sdk_config = sdk.internal.app_config
-print(sdk_config)
 print(f"⬢ Webhook: Balance ${config['api_url']}/webhook/balance")
 print(f"⬢ Webhook: Event ${config['api_url']}/webhook/event")
 print(f"⬢ Webhook: Verify ${config['api_url']}/webhook/verify")
