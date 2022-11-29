@@ -4,11 +4,6 @@ from kinetic_sdk.generated.client.model.commitment import Commitment
 
 import json
 
-# import { AppConfigMint, KineticSdk, Transaction } from '@kin-kinetic/sdk'
-# import { Commitment, TransactionType } from '@kin-kinetic/solana'
-
-# import { ServerConfig } from '../server/server-config'
-
 class Kinetic(object):
 
     def __init__(self, config, sdk: KineticSdk, keypair: Keypair):
@@ -66,8 +61,8 @@ class Kinetic(object):
         print(f"⬢ Payment: address: {public_key}")
         print(f"⬢ Payment: allow empty accounts: {'yes' if self.config['payment_allow_new'] is True else 'no'}")
         print(f"⬢ Payment: allow existing accounts: {'yes' if self.config['payment_allow_existing'] is True else 'no'}")
+        print(f"⬢ Payment: auth secret: {'enabled' if self.config['payment_auth_secret'] is True else 'disabled'}")
         print(f"⬢ Payment: max: {self.config['payment_max']}")
-        print(f"⬢ Payment: secret: {'enabled' if self.config['payment_secret'] is True else 'disabled'}")
 
         
         # Get the balance of this account
@@ -153,7 +148,7 @@ class Kinetic(object):
             commitment = Commitment('Confirmed'),
             destination = destination,
             owner = self.keypair,
-            # sender_create = sender_create, # FIXME: Support Sender Create
+            sender_create = sender_create
             # type = 'Earn',
         )
 

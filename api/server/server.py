@@ -22,7 +22,7 @@ sdk = KineticSdk.setup(
 )
 
 # Create instance of our Kinetic helper class
-kinetic = Kinetic(config, sdk, Keypair.from_mnemonic(config['payment_mnemonic']))
+kinetic = Kinetic(config, sdk, Keypair.from_mnemonic(config['payment_secret']))
 
 # Payment Routes, pass in our Kinetic helper class
 @api_router.get("/payment/{destination}/{amount}", status_code=200)
@@ -44,12 +44,16 @@ def uptime() -> dict:
 # Start server
 app.include_router(api_router)
 print(f"🚀 Listening on port {config['port']}")
-config = sdk.internal.app_config
-print(f"⬢ Kinetic: Connected to App: {config['app']['name']} {config['app']['index']} ")
-print(f"⬢ Kinetic: Connected to API: {config['api']['name']} {config['api']['version']} ")
-print(f"⬢ Kinetic: Connected to Environment: {config['environment']['name']} ({config['environment']['cluster']['name']}) ")
+sdk_config = sdk.internal.app_config
+print(sdk_config)
+print(f"⬢ Webhook: Balance ${config['api_url']}/webhook/balance")
+print(f"⬢ Webhook: Event ${config['api_url']}/webhook/event")
+print(f"⬢ Webhook: Verify ${config['api_url']}/webhook/verify")
+print(f"⬢ Kinetic: Connected to App: {sdk_config['app']['name']} {sdk.config['app']['index']} ")
+print(f"⬢ Kinetic: Connected to API: {sdk_config['api']['name']} {sdk.config['api']['version']} ")
+print(f"⬢ Kinetic: Connected to Environment: {sdk_config['environment']['name']} ({sdk_config['environment']['cluster']['name']}) ")
 
-for mint in config['mints']:
+for mint in sdk_config['mints']:
     mint_airdrop_max = mint['airdrop_max']
     mint_symbol = mint['symbol']
     mint_airdrop = mint['airdrop']
