@@ -1,12 +1,12 @@
+import based58 as based58
 from fastapi import FastAPI, APIRouter, Body, Request
-from kinetic_sdk import KineticSdk, Keypair
-
-from server.server_config import get_server_config
+from kinetic_sdk import KineticSdk
+from kinetic_sdk.keypair import Keypair
 from libs.kinetic import Kinetic
 from server.routes.payment_route import payment_route
 from server.routes.uptime_route import uptime_route
 from server.routes.webhook_route import webhook_route
-
+from server.server_config import get_server_config
 
 config = get_server_config()
 
@@ -22,7 +22,7 @@ sdk = KineticSdk.setup(
 )
 
 # Create instance of our Kinetic helper class
-kinetic = Kinetic(config, sdk, Keypair.from_mnemonic(config['payment_secret']))
+kinetic = Kinetic(config, sdk, Keypair.from_byte_array(bytes(config['payment_secret'], 'utf-8')))
 
 # Payment Routes, pass in our Kinetic helper class
 @api_router.get("/payment/{destination}/{amount}", status_code=200)

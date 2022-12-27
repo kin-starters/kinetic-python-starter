@@ -26,7 +26,7 @@ cd kinetic-python-starter
 ### 2. Install the dependencies
 
 ```shell
-make install
+poetry install
 ```
 
 ### 3. Configure your environment

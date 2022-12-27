@@ -1,6 +1,6 @@
-from kinetic_sdk import Keypair
+from kinetic_sdk.keypair import Keypair
 from kinetic_sdk import KineticSdk
-from kinetic_sdk.generated.client.model.commitment import Commitment
+from kinetic_sdk import Commitment
 
 import json
 
@@ -99,18 +99,18 @@ class Kinetic(object):
         return success()
 
 
-    def handle_event_webhook(self, transaction, error, success):
-        amount = transaction.amount
-        destination = transaction.destination
-        signature = transaction.signature
+    def handle_event_webhook(self, payload, error, success):
+        amount = payload.amount
+        destination = payload.destination
+        signature = payload.signature
 
         print(f"📨 Webhook: Event: sent {amount} to {destination} {self.sdk.get_explorer_url(f'tx/{signature}')}")
         return success()
 
 
-    def handle_verify_webhook(self, transaction, error, success):
-        amount = transaction.amount
-        destination = destination.amount
+    def handle_verify_webhook(self, payload, error, success):
+        amount = payload.amount
+        destination = payload.amount
 
         # Check if the amount is above the minimum
         if int(amount) < 100:
@@ -130,7 +130,7 @@ class Kinetic(object):
         # Create Account
         created = self.sdk.create_account(
             owner=self.keypair,
-            commitment='Finalized',
+            commitment=Commitment('Finalized'),
         )
         print(f"⬢ Payment: account: created account {self.sdk.get_explorer_url(f'tx/{created.signature}')}...")
         # Resolve Token Account
