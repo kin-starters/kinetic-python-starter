@@ -252,7 +252,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "kinetic-sdk"
-version = "1.0.0rc13.post1"
+version = "1.0.0rc16"
 description = ""
 category = "main"
 optional = false
@@ -516,7 +516,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.1"
-content-hash = "8bfa240b25a6f6a839f869a8799d5c1e449f2866d16175d639d2c8cb42de5904"
+content-hash = "1388ebb2a2cd1ce4d66a36c21695d859787c707d8aaddd5cf1597ab5dc4becbf"
 
 [metadata.files]
 anyio = [
@@ -729,8 +729,8 @@ idna = [
     {file = "idna-3.4.tar.gz", hash = "sha256:814f528e8dead7d329833b91c5faa87d60bf71824cd12a7530b5526063d02cb4"},
 ]
 kinetic-sdk = [
-    {file = "kinetic-sdk-1.0.0rc13.post1.tar.gz", hash = "sha256:5de8b3b219dc93072399288e1ea225803b77d7c44fe95c61c6438efc082de4e2"},
-    {file = "kinetic_sdk-1.0.0rc13.post1-py3-none-any.whl", hash = "sha256:e702f178baea569d97953b83c83f63aa2c21c3267f272327fe9f34a44d913e8e"},
+    {file = "kinetic-sdk-1.0.0rc16.tar.gz", hash = "sha256:e4e5cb1e77b9386a68081351f192aa5ac25e91b9ed76a4c34cd33f813c25ec6f"},
+    {file = "kinetic_sdk-1.0.0rc16-py3-none-any.whl", hash = "sha256:1c26b21b1c090ccc360fea815233aafae06aaeccabce4c85ba00b2654d724d84"},
 ]
 py-sr25519-bindings = [
     {file = "py_sr25519_bindings-0.2.0-cp310-cp310-macosx_10_7_x86_64.whl", hash = "sha256:86cc1a571852a4f2ade827ebf211e066b23ab805d3e864cbe213a3d8cd53f7d5"},
